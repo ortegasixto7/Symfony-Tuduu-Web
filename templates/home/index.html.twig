@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+  <h1 class="center-align">Tuduu</h1>
+  <div class="row">
+    <div class="col s12 m8 offset-m2 l8 offset-l2">
+      <div class="card-panel hoverable">
+      <div class="row">
+        <div class="input-field col s9">
+        <input id="input-add-tuduu" type="text" />
+        <label for="input-add-tuduu">What do you need to do today?</label>
+        </div>
+        <div class="input-field col s3">
+        <button
+          class="btn waves-effect waves-light"
+          type="button"
+          style="width: 100%; margin-top: 10px;"
+        >
+          Add
+        </button>
+        </div>
+      </div>
+      <ul class="collection">
+          <li class="collection-item">
+            <form action="#">
+              <div>
+                <label>
+                  <input type="checkbox" />
+                  <span>Red</span>
+                </label>
+                <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
+              </div>
+            </form>
+          </li>
+          <li class="collection-item">
+          <form action="#">
+            <div>
+              <label>
+                <input type="checkbox" checked="checked" />
+                <span style="text-decoration: line-through;">Red</span>
+              </label>
+              <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
+            </div>
+          </form>
+          </li>
+          <li class="collection-item">
+          <form action="#">
+            <div>
+              <label>
+                <input type="checkbox" />
+                <span>Red</span>
+              </label>
+              <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
+            </div>
+          </form>
+          </li>
+          <li class="collection-item">
+          <form action="#">
+            <div>
+              <label>
+                <input type="checkbox" />
+                <span>Red</span>
+              </label>
+              <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
+            </div>
+          </form>
+          </li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
