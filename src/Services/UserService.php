@@ -6,6 +6,7 @@ use App\Interfaces\IUserPersistence;
 use App\Interfaces\IUserUseCases;
 use App\Entity\User;
 use App\Helpers\PasswordHelper;
+use Exception;
 
 class UserService implements IUserUseCases
 {
@@ -19,6 +20,10 @@ class UserService implements IUserUseCases
 
   public function save(User $user): void
   {
+
+    if (empty(trim($user->getFirstName()))) throw new Exception('Error getFirstName()');
+
+
     $user->setPassword($this->passwordHelper->encode($user->getPassword()));
     $user->setSecurityCode($this->passwordHelper->encode($user->getSecurityCode()));
     $this->userRepository->save($user);
