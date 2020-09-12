@@ -21,8 +21,11 @@ class UserService implements IUserUseCases
   public function save(User $user): void
   {
 
-    if (empty(trim($user->getFirstName()))) throw new Exception('Error getFirstName()');
-
+    if (empty(trim($user->getFirstName()))) throw new Exception('FirstName is Required');
+    if (empty(trim($user->getLastName()))) throw new Exception('LastName is Required');
+    if (empty(trim($user->getEmail()))) throw new Exception('Email is Required');
+    if (empty(trim($user->getPassword()))) throw new Exception('Password is Required');
+    if (empty(trim($user->getSecurityCode()))) throw new Exception('SecurityCode is Required');
 
     $user->setPassword($this->passwordHelper->encode($user->getPassword()));
     $user->setSecurityCode($this->passwordHelper->encode($user->getSecurityCode()));
