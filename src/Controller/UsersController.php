@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\DTO\UserForgotPasswordDTO;
+use App\DTO\UserLoginDTO;
 use App\Entity\User;
 use App\Enum\EnumMessage;
 use App\Form\UserForgotPasswordType;
+use App\Form\UserLoginType;
 use App\Form\UserRegisterType;
 use App\Repositories\UserRepositoryDoctrineAdapter;
 use App\Services\UserService;
@@ -27,9 +29,19 @@ class UsersController extends AbstractController
    * @Route("/login", name="users.login")
    * @Route("/")
    */
-  public function loginPage()
+  public function loginPage(Request $request)
   {
-    return $this->render('users/login.html.twig');
+    $user = new UserLoginDTO();
+    $form = $this->createForm(UserLoginType::class, $user);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+      if ($this->userService->login($user->getEmail(), $user->getPassword())) {
+        return $this->redirectToRoute('home.index');
+      }
+      $this->addFlash(EnumMessage::ALERT, 'The email is alredy in use.');
+    }
+
+    return $this->render('users/login.html.twig', ['form' => $form->createView()]);
   }
 
   /**
