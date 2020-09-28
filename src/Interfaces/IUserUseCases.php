@@ -10,4 +10,5 @@ interface IUserUseCases
   public function isSecurityCodeValid(string $securityCode, string $hash): bool;
   public function isPasswordValid(string $password, string $hash): bool;
   public function findOneByEmail(string $emailAddress): ?User;
+  public function login(string $emailAddress, string $password): bool;
 }

@@ -46,4 +46,18 @@ class UserService implements IUserUseCases
   {
     return $this->passwordHelper->isValid($password, $hash);
   }
+
+  public function login(string $emailAddress, string $password): bool
+  {
+    $user = $this->findOneByEmail($emailAddress);
+    if ($user === null) {
+      throw new Exception("User or password are incorrect");
+    }
+
+    if (!$this->isPasswordValid($password, $user->getPassword())) {
+      throw new Exception("User or password are incorrect");
+    }
+
+    return true;
+  }
 }
