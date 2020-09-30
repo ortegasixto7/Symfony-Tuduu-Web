@@ -9,6 +9,7 @@ use App\Enum\EnumMessage;
 use App\Form\UserForgotPasswordType;
 use App\Form\UserLoginType;
 use App\Form\UserRegisterType;
+use App\Helpers\SessionHelper;
 use App\Repositories\UserRepositoryDoctrineAdapter;
 use App\Services\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,9 +20,11 @@ use Doctrine\ORM\EntityManagerInterface;
 class UsersController extends AbstractController
 {
   private $userService;
+  private $sessionHelper;
   public function __construct(EntityManagerInterface $entityManager)
   {
     $this->userService = new UserService(new UserRepositoryDoctrineAdapter($entityManager));
+    $this->sessionHelper = new SessionHelper();
   }
 
 
@@ -73,16 +76,16 @@ class UsersController extends AbstractController
     $form = $this->createForm(UserForgotPasswordType::class, $user);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
-      $userResult = $this->userRepository->findOneBy(['email' => $user->getEmail()]);
+      $userResult = $this->userService->findOneByEmail($user->getEmail());
       if ($userResult == null) {
         $this->addFlash(EnumMessage::ALERT, 'Invalid data.');
       } else {
-        if (!$this->userRepository->isSecurityCodeValid($user->getSecurityCode(), $userResult->getSecurityCode())) {
+        if (!$this->userService->isSecurityCodeValid($user->getSecurityCode(), $userResult->getSecurityCode())) {
           $this->addFlash(EnumMessage::ALERT, 'Invalid data.');
         } else {
-          // $this->userRepository->save($user);
+          $this->sessionHelper->setUserEmail($userResult->getEmail());
           $this->addFlash(EnumMessage::SUCCESS, 'You registered successfully.');
-          return $this->redirectToRoute('users.login');
+          return $this->redirectToRoute('users.change_password');
         }
       }
     }
