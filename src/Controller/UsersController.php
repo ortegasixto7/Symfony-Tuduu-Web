@@ -84,7 +84,6 @@ class UsersController extends AbstractController
           $this->addFlash(EnumMessage::ALERT, 'Invalid data.');
         } else {
           $this->sessionHelper->setUserEmail($userResult->getEmail());
-          $this->addFlash(EnumMessage::SUCCESS, 'You registered successfully.');
           return $this->redirectToRoute('users.change_password');
         }
       }
@@ -97,6 +96,7 @@ class UsersController extends AbstractController
    */
   public function changePasswordPage()
   {
-    return $this->render('users/changePassword.html.twig');
+    $userEmail = $this->sessionHelper->getUserEmail();
+    return $this->render('users/changePassword.html.twig', ['userEmail' => $userEmail]);
   }
 }
