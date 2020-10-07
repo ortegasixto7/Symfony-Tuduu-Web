@@ -20,6 +20,11 @@ class UserRepositoryMockAdapter implements IUserPersistence
     array_push($this->users, (object) $user);
   }
 
+  public function update(User $user): void
+  {
+    array_push($this->users, (object) $user);
+  }
+
   public function findOneByEmail(string $emailAddress): ?User
   {
     $result = null;
