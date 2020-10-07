@@ -23,6 +23,12 @@ class UserRepositoryDoctrineAdapter implements IUserPersistence
     $this->entityManager->flush();
   }
 
+  public function update(User $user): void
+  {
+    $this->entityManager->persist($user);
+    $this->entityManager->flush();
+  }
+
   public function findOneByEmail(string $emailAddress): ?User
   {
     return $this->userRepository->findOneBy(['email' => $emailAddress]);
