@@ -16,6 +16,7 @@
           class="btn waves-effect waves-light"
           type="button"
           style="width: 100%; margin-top: 10px;"
+          onclick="addTuduu()"
         >
           Add
         </button>
@@ -71,4 +72,24 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+function addTuduu(){
+  
+  const data = new FormData();
+  data.append('sixto', 'ortega');
+  
+  //const data = { sixto: "ortega" }
+  console.log('Init')
+  console.log('Data', data)
+  fetch('/home/create', {
+    method: 'POST',
+    body: data
+  })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error))
+}
+</script>
 {% endblock %}
