@@ -5,8 +5,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
-// @ORM\Entity(repositoryClass=UserRepository::class)
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass=App\Repository\UserRepository::class)
@@ -19,33 +19,33 @@ class User
    * @ORM\Column(type="guid")
    * @ORM\GeneratedValue(strategy="UUID")
    */
-  private $id;
+  private string $id;
 
   /**
    * @ORM\Column(type="string", length=60)
    * @Assert\NotBlank(message="This field is required.")
    */
-  private $firstName;
+  private string $firstName;
 
   /**
    * @ORM\Column(type="string", length=60)
    * @Assert\NotBlank(message="This field is required.")
    */
-  private $lastName;
+  private string $lastName;
 
   /**
    * @ORM\Column(type="string", length=100)
    * @Assert\NotBlank(message="This field is required.")
    * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
    */
-  private $email;
+  private string $email;
 
   /**
    * @ORM\Column(type="string", length=100)
    * @Assert\NotBlank(message="This field is required.")
    * @Assert\Length(min=6, minMessage="This field should have more than 6 characters.")
    */
-  private $password;
+  private string $password;
 
   /**
    * @ORM\Column(type="string", length=100)
@@ -58,14 +58,24 @@ class User
    *      allowEmptyString = false
    * )
    */
-  private $securityCode;
+  private string $securityCode;
 
-  public function getId(): ?int
+  /**
+   * @ORM\OneToMany(targetEntity="App\Entity\Tuduu", mappedBy="user")
+   */
+  private Collection $tuduus;
+
+  public function __construct()
+  {
+    $this->tuduus = new ArrayCollection();
+  }
+
+  public function getId(): string
   {
     return $this->id;
   }
 
-  public function getFirstName(): ?string
+  public function getFirstName(): string
   {
     return $this->firstName;
   }
@@ -73,11 +83,10 @@ class User
   public function setFirstName(string $firstName): self
   {
     $this->firstName = $firstName;
-
     return $this;
   }
 
-  public function getLastName(): ?string
+  public function getLastName(): string
   {
     return $this->lastName;
   }
@@ -85,11 +94,10 @@ class User
   public function setLastName(string $lastName): self
   {
     $this->lastName = $lastName;
-
     return $this;
   }
 
-  public function getEmail(): ?string
+  public function getEmail(): string
   {
     return $this->email;
   }
@@ -97,11 +105,10 @@ class User
   public function setEmail(string $email): self
   {
     $this->email = $email;
-
     return $this;
   }
 
-  public function getPassword(): ?string
+  public function getPassword(): string
   {
     return $this->password;
   }
@@ -109,11 +116,10 @@ class User
   public function setPassword(string $password): self
   {
     $this->password = $password;
-
     return $this;
   }
 
-  public function getSecurityCode(): ?string
+  public function getSecurityCode(): string
   {
     return $this->securityCode;
   }
@@ -121,7 +127,14 @@ class User
   public function setSecurityCode(string $securityCode): self
   {
     $this->securityCode = $securityCode;
-
     return $this;
+  }
+
+  /**
+   * @return Collection|Tuduu[]
+   */
+  public function getTuduus(): Collection
+  {
+    return $this->tuduus;
   }
 }
