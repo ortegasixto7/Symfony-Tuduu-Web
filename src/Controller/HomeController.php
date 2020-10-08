@@ -2,12 +2,32 @@
 
 namespace App\Controller;
 
+use App\Entity\Tuduu;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use App\Services\TuduuService;
+use App\Services\UserService;
+use App\Repositories\TuduuRepositoryDoctrineAdapter;
+use App\Repositories\UserRepositoryDoctrineAdapter;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Throwable;
 
 class HomeController extends AbstractController
 {
+
+  private $session;
+  private $tuduuService;
+  private $userService;
+  public function __construct(EntityManagerInterface $entityManager, SessionInterface $session)
+  {
+    $this->tuduuService = new TuduuService(new TuduuRepositoryDoctrineAdapter($entityManager));
+    $this->userService = new UserService(new UserRepositoryDoctrineAdapter($entityManager));
+    $this->session = $session;
+  }
+
   /**
    * @Route("/home", name="home.index")
    */
@@ -23,8 +43,17 @@ class HomeController extends AbstractController
    */
   public function create(Request $request)
   {
-    $postData = $request->request->get('sixto');
-    // $data = $postData->sixto;    
-    return $this->json(['username' => 'jane.doe', 'dataSent' => $postData]);
+    try {
+      $tuduuName = $request->request->get('tuduuName');
+      $userEmail = $this->session->get('userEmail');
+      $user = $this->userService->findOneByEmail($userEmail);
+      $tuduu = new Tuduu();
+      $tuduu->setName($tuduuName);
+      $tuduu->setUser($user);
+      $this->tuduuService->save($tuduu);
+      return $this->json(['message' => 'Tuduu created', 'statusCode' => 201, 'error' => false, 'data' => []], 201);
+    } catch (Throwable $error) {
+      return $this->json(['message' => $error->getMessage(), 'statusCode' => 400, 'error' => true, 'data' => []], 400);
+    }
   }
 }

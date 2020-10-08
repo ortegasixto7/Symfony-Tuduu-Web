@@ -22,6 +22,12 @@
         </button>
         </div>
       </div>
+
+      {# Progress component #}
+      <div id="progress-component" class="hide">
+        {{ include('shared/_progress.html.twig') }}
+      </div>
+
       <ul class="collection">
           <li class="collection-item">
             <form action="#">
@@ -74,22 +80,39 @@
 </div>
 {% endblock %}
 {% block javascripts %}
+<script src="{{ asset('js/httpClientHelper.js') }}"></script>
 <script>
-function addTuduu(){
-  
-  const data = new FormData();
-  data.append('sixto', 'ortega');
-  
-  //const data = { sixto: "ortega" }
-  console.log('Init')
-  console.log('Data', data)
-  fetch('/home/create', {
-    method: 'POST',
-    body: data
-  })
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error(error))
-}
+  const inputName$ = document.getElementById('input-add-tuduu')
+  async function addTuduu(){ 
+
+    if(inputName$.value.toString().trim() === ''){
+      showToast('Please type something!')
+      inputName$.value = ''
+      return
+    }
+
+    const data = new FormData()
+    data.append('tuduuName', inputName$.value)
+
+    try {
+      toggleProgress()
+      const result = await asyncHttpPost(data, '/home/create')
+      showToast(result.message)
+      inputName$.value = ''
+    } catch(error) {
+      console.error(error)
+    } finally {
+      toggleProgress()
+    }
+  }
+
+  function toggleProgress(){
+    const element = document.getElementById("progress-component");
+    element.classList.toggle("hide");
+  }
+
+  function showToast(message) {
+    M.toast({ html: message })
+  }
 </script>
 {% endblock %}

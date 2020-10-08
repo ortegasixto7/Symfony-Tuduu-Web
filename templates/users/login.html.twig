@@ -27,11 +27,18 @@
                   <p>Don't have an account? <a href="{{path('users.register')}}">Register here</a></p>
                 </div>
               </div>
+
+              {# Loading component #}
+              <div id="loading-component" class="hide">
+                {{ include('shared/_loading.html.twig') }}
+              </div>
+              
               <button
                 class="btn waves-effect waves-light"
                 type="submit"
                 name="action"
                 style="width: 100%;"
+                onclick="showLoader()"
               >
                 Login
               </button>
@@ -42,4 +49,12 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+function showLoader(){
+  const element = document.getElementById("loading-component");
+  element.classList.remove("hide");
+}
+</script>
 {% endblock %}
