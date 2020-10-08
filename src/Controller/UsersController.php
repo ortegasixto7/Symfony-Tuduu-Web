@@ -40,9 +40,10 @@ class UsersController extends AbstractController
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       if ($this->userService->login($user->getEmail(), $user->getPassword())) {
+        $this->session->set('userEmail', $user->getEmail());
         return $this->redirectToRoute('home.index');
       }
-      $this->addFlash(EnumMessage::ALERT, 'The email is already in use.');
+      //$this->addFlash(EnumMessage::ALERT, 'The email is already in use.');
     }
 
     return $this->render('users/login.html.twig', ['form' => $form->createView()]);
