@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Interfaces\ITuduuPersistence;
 use App\Interfaces\ITuduuUseCases;
 use App\Entity\Tuduu;
+use App\Helpers\ExceptionHelper;
 use DateTime;
 use Exception;
 
@@ -19,9 +20,8 @@ class TuduuService implements ITuduuUseCases
   public function save(Tuduu $tuduu): void
   {
 
-    throw new Exception('Name is Required');
-    if (empty(trim($tuduu->getName()))) throw new Exception('Name is Required');
-    if ($tuduu->getUser() === null) throw new Exception('User is Required');
+    if (empty(trim($tuduu->getName()))) throw new ExceptionHelper('Name is Required');
+    if ($tuduu->getUser() === null) throw new ExceptionHelper('User is Required');
 
     $tuduu->setCompleted(false);
     $tuduu->setCreatedAt(new DateTime());

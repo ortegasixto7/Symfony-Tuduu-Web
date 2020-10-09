@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Throwable;
+use App\Helpers\ExceptionHelper;
 
 class HomeController extends AbstractController
 {
@@ -52,8 +53,10 @@ class HomeController extends AbstractController
       $tuduu->setUser($user);
       $this->tuduuService->save($tuduu);
       return $this->json(['message' => 'Tuduu created', 'statusCode' => 201, 'error' => false, 'data' => []], 201);
-    } catch (Throwable $error) {
+    } catch (ExceptionHelper $error) {
       return $this->json(['message' => $error->getMessage(), 'statusCode' => 400, 'error' => true, 'data' => []], 400);
+    } catch (Throwable $error) {
+      return $this->json(['message' => $error->getMessage(), 'statusCode' => 500, 'error' => true, 'data' => []], 500);
     }
   }
 }
