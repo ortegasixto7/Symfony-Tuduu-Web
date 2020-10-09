@@ -14,6 +14,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Throwable;
+use App\Helpers\ExceptionHelper;
+use App\Helpers\JsonResponseHelper;
 
 class HomeController extends AbstractController
 {
@@ -21,10 +23,12 @@ class HomeController extends AbstractController
   private $session;
   private $tuduuService;
   private $userService;
+  private $jsonResponseHelper;
   public function __construct(EntityManagerInterface $entityManager, SessionInterface $session)
   {
     $this->tuduuService = new TuduuService(new TuduuRepositoryDoctrineAdapter($entityManager));
     $this->userService = new UserService(new UserRepositoryDoctrineAdapter($entityManager));
+    $this->jsonResponseHelper = new JsonResponseHelper();
     $this->session = $session;
   }
 
@@ -51,9 +55,12 @@ class HomeController extends AbstractController
       $tuduu->setName($tuduuName);
       $tuduu->setUser($user);
       $this->tuduuService->save($tuduu);
-      return $this->json(['message' => 'Tuduu created', 'statusCode' => 201, 'error' => false, 'data' => []], 201);
+
+      return $this->jsonResponseHelper->created('Tuduu created');
+    } catch (ExceptionHelper $error) {
+      return $this->jsonResponseHelper->badRequest($error->getMessage());
     } catch (Throwable $error) {
-      return $this->json(['message' => $error->getMessage(), 'statusCode' => 400, 'error' => true, 'data' => []], 400);
+      return $this->jsonResponseHelper->internal($error->getMessage());
     }
   }
 }
