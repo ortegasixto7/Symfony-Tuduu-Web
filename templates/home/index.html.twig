@@ -29,46 +29,18 @@
         {{ include('shared/_progress.html.twig') }}
       </div>
 
+      <section id="collection-tuduus">
+        {# Tuduus component #}
+        {{ include('shared/_tuduus.html.twig', { tuduus: tuduus }) }}
+      </section>
+
       <ul class="collection">
-          <li class="collection-item">
-            <form action="#">
-              <div>
-                <label>
-                  <input type="checkbox" />
-                  <span>Red</span>
-                </label>
-                <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
-              </div>
-            </form>
-          </li>
           <li class="collection-item">
           <form action="#">
             <div>
               <label>
                 <input type="checkbox" checked="checked" />
                 <span style="text-decoration: line-through;">Red</span>
-              </label>
-              <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
-            </div>
-          </form>
-          </li>
-          <li class="collection-item">
-          <form action="#">
-            <div>
-              <label>
-                <input type="checkbox" />
-                <span>Red</span>
-              </label>
-              <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
-            </div>
-          </form>
-          </li>
-          <li class="collection-item">
-          <form action="#">
-            <div>
-              <label>
-                <input type="checkbox" />
-                <span>Red</span>
               </label>
               <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
             </div>
@@ -84,6 +56,7 @@
 <script src="{{ asset('js/httpClientHelper.js') }}"></script>
 <script>
   const inputName$ = document.getElementById('input-add-tuduu')
+  const sectionCollectionTuduus$ = document.getElementById('collection-tuduus')
   const token = document.getElementById('_token').value
   async function addTuduu(){ 
 
@@ -101,6 +74,7 @@
       toggleProgress()
       const result = await asyncHttpPost(data, '/home/create')
       showToast(result.message)
+      sectionCollectionTuduus$.innerHTML = result.data.resultView
       inputName$.value = ''
     } catch(error) {
       console.error(error)
