@@ -8,7 +8,8 @@
       <div class="card-panel hoverable">
       <div class="row">
         <div class="input-field col s9">
-        <input id="input-add-tuduu" type="text" />
+        <input id="_token" name="_token" type="hidden" value="{{ csrf_token('addTuduu') }}" />
+        <input id="input-add-tuduu" name="input-add-tuduu" type="text" />
         <label for="input-add-tuduu">What do you need to do today?</label>
         </div>
         <div class="input-field col s3">
@@ -83,6 +84,7 @@
 <script src="{{ asset('js/httpClientHelper.js') }}"></script>
 <script>
   const inputName$ = document.getElementById('input-add-tuduu')
+  const token = document.getElementById('_token').value
   async function addTuduu(){ 
 
     if(inputName$.value.toString().trim() === ''){
@@ -93,6 +95,7 @@
 
     const data = new FormData()
     data.append('tuduuName', inputName$.value)
+    data.append('token', token)
 
     try {
       toggleProgress()

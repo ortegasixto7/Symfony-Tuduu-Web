@@ -48,6 +48,10 @@ class HomeController extends AbstractController
   public function create(Request $request)
   {
     try {
+      $token = $request->request->get('token');
+      if (!$this->isCsrfTokenValid('addTuduu', $token)) {
+        return $this->jsonResponseHelper->unauthorized('Unauthorized');
+      }
       $tuduuName = $request->request->get('tuduuName');
       $userEmail = $this->session->get('userEmail');
       $user = $this->userService->findOneByEmail($userEmail);
