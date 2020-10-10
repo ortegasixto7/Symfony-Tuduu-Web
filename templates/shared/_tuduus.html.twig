@@ -1,0 +1,13 @@
+<ul class="collection">
+  {% for tuduu in tuduus %}
+    <li class="collection-item">
+      <div>
+        <label>
+          <input type="checkbox" />
+          <span>{{ tuduu.name }}</span>
+        </label>
+        <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
+      </div>
+    </li>
+  {% endfor %}
+</ul>
