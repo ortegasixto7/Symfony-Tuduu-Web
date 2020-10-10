@@ -11,7 +11,6 @@ use App\Services\UserService;
 use App\Repositories\TuduuRepositoryDoctrineAdapter;
 use App\Repositories\UserRepositoryDoctrineAdapter;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Throwable;
 use App\Helpers\ExceptionHelper;
@@ -37,8 +36,12 @@ class HomeController extends AbstractController
    */
   public function index()
   {
+    // Validate if user exists into the session
+    $userEmail = $this->session->get('userEmail');
+    $user = $this->userService->findOneByEmail($userEmail);
+    $tuduus = $user->getTuduus();
     return $this->render('home/index.html.twig', [
-      'controller_name' => 'HomeController',
+      'tuduus' => $tuduus,
     ]);
   }
 
@@ -60,7 +63,13 @@ class HomeController extends AbstractController
       $tuduu->setUser($user);
       $this->tuduuService->save($tuduu);
 
-      return $this->jsonResponseHelper->created('Tuduu created');
+      $user = $this->userService->findOneByEmail($userEmail);
+      $tuduus = $user->getTuduus();
+      $result = $this->renderView('shared/_tuduus.html.twig', [
+        'tuduus' => $tuduus,
+      ]);
+
+      return $this->jsonResponseHelper->created('Tuduu created', ['resultView' => $result]);
     } catch (ExceptionHelper $error) {
       return $this->jsonResponseHelper->badRequest($error->getMessage());
     } catch (Throwable $error) {
