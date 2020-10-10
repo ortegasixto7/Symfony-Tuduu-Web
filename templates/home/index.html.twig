@@ -8,7 +8,8 @@
       <div class="card-panel hoverable">
       <div class="row">
         <div class="input-field col s9">
-        <input id="input-add-tuduu" type="text" />
+        <input id="_token" name="_token" type="hidden" value="{{ csrf_token('addTuduu') }}" />
+        <input id="input-add-tuduu" name="input-add-tuduu" type="text" />
         <label for="input-add-tuduu">What do you need to do today?</label>
         </div>
         <div class="input-field col s3">
@@ -28,46 +29,18 @@
         {{ include('shared/_progress.html.twig') }}
       </div>
 
+      <section id="collection-tuduus">
+        {# Tuduus component #}
+        {{ include('shared/_tuduus.html.twig', { tuduus: tuduus }) }}
+      </section>
+
       <ul class="collection">
-          <li class="collection-item">
-            <form action="#">
-              <div>
-                <label>
-                  <input type="checkbox" />
-                  <span>Red</span>
-                </label>
-                <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
-              </div>
-            </form>
-          </li>
           <li class="collection-item">
           <form action="#">
             <div>
               <label>
                 <input type="checkbox" checked="checked" />
                 <span style="text-decoration: line-through;">Red</span>
-              </label>
-              <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
-            </div>
-          </form>
-          </li>
-          <li class="collection-item">
-          <form action="#">
-            <div>
-              <label>
-                <input type="checkbox" />
-                <span>Red</span>
-              </label>
-              <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
-            </div>
-          </form>
-          </li>
-          <li class="collection-item">
-          <form action="#">
-            <div>
-              <label>
-                <input type="checkbox" />
-                <span>Red</span>
               </label>
               <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
             </div>
@@ -83,6 +56,8 @@
 <script src="{{ asset('js/httpClientHelper.js') }}"></script>
 <script>
   const inputName$ = document.getElementById('input-add-tuduu')
+  const sectionCollectionTuduus$ = document.getElementById('collection-tuduus')
+  const token = document.getElementById('_token').value
   async function addTuduu(){ 
 
     if(inputName$.value.toString().trim() === ''){
@@ -93,11 +68,13 @@
 
     const data = new FormData()
     data.append('tuduuName', inputName$.value)
+    data.append('token', token)
 
     try {
       toggleProgress()
       const result = await asyncHttpPost(data, '/home/create')
       showToast(result.message)
+      sectionCollectionTuduus$.innerHTML = result.data.resultView
       inputName$.value = ''
     } catch(error) {
       console.error(error)

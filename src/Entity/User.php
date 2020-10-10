@@ -62,6 +62,7 @@ class User
 
   /**
    * @ORM\OneToMany(targetEntity="App\Entity\Tuduu", mappedBy="user")
+   * @ORM\OrderBy({"createdAt" = "ASC"})
    */
   private Collection $tuduus;
 

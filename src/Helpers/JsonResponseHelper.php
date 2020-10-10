@@ -16,6 +16,11 @@ final class JsonResponseHelper
     return $this->base($message, 400);
   }
 
+  public function unauthorized(string $message): JsonResponse
+  {
+    return $this->base($message, 403);
+  }
+
   public function notFound(string $message): JsonResponse
   {
     return $this->base($message, 404);

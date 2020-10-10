@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcc889c1d1e5f4da06a0b663e4408f55",
+    "content-hash": "a504bc3bd21d119e1f99680351dca50e",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -5846,16 +5846,16 @@
         },
         {
             "name": "symfony/security-csrf",
-            "version": "v5.1.2",
+            "version": "v5.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security-csrf.git",
-                "reference": "962323e4db4458d731d5006f14019a22a2f84b06"
+                "reference": "f1659a16028a50766dbffa73160fb94599131014"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-csrf/zipball/962323e4db4458d731d5006f14019a22a2f84b06",
-                "reference": "962323e4db4458d731d5006f14019a22a2f84b06",
+                "url": "https://api.github.com/repos/symfony/security-csrf/zipball/f1659a16028a50766dbffa73160fb94599131014",
+                "reference": "f1659a16028a50766dbffa73160fb94599131014",
                 "shasum": ""
             },
             "require": {
@@ -5915,7 +5915,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-20T17:43:50+00:00"
+            "time": "2020-09-02T16:23:27+00:00"
         },
         {
             "name": "symfony/security-guard",
