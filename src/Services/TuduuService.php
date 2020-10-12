@@ -28,4 +28,18 @@ class TuduuService implements ITuduuUseCases
 
     $this->tuduuRepository->save($tuduu);
   }
+
+  public function update(Tuduu $tuduu): void
+  {
+
+    if ($tuduu === null) throw new ExceptionHelper('Tuduu is Required');
+    if ($tuduu->getUser() === null) throw new ExceptionHelper('User is Required');
+
+    $this->tuduuRepository->update($tuduu);
+  }
+
+  public function getById(string $tuduuId): ?Tuduu
+  {
+    return $this->tuduuRepository->getById($tuduuId);
+  }
 }

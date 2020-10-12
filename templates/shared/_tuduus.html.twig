@@ -3,11 +3,46 @@
     <li class="collection-item">
       <div>
         <label>
-          <input type="checkbox" />
-          <span>{{ tuduu.name }}</span>
+          {% if tuduu.completed %}
+            <input id="input_{{ tuduu.id }}" type="checkbox" checked="checked" onchange="updateTuduu('{{ tuduu.id }}')"/>
+            <span id="span_{{ tuduu.id }}" class="line-through">{{ tuduu.name }}</span>
+          {% else %}
+            <input id="input_{{ tuduu.id }}" type="checkbox" onchange="updateTuduu('{{ tuduu.id }}')"/>
+            <span id="span_{{ tuduu.id }}">{{ tuduu.name }}</span>
+          {% endif %}
+
         </label>
-        <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
+        <a href="#!" class="secondary-content">
+          <i class="material-icons">clear</i>
+        </a>
       </div>
     </li>
   {% endfor %}
 </ul>
+{% block javascripts %}
+  <script src="{{ asset('js/httpClientHelper.js') }}"></script>
+  <script>
+
+    async function updateTuduu(tuduuId) {
+      const data = new FormData();
+      data.append('tuduuId', tuduuId);
+
+      try {
+        toggleLineThrough(tuduuId);
+        const result = await asyncHttpPost(data, '/home/update');
+        showToast(result.message);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function toggleLineThrough(tuduuId) {
+      const element = document.getElementById (`span_${tuduuId}`);
+      if (element.classList.contains("line-through")) {
+        element.classList.remove("line-through");
+      } else {
+        element.classList.add("line-through");
+      }
+    }
+  </script>
+{% endblock %}

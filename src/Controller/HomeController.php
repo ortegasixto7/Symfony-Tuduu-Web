@@ -76,4 +76,38 @@ class HomeController extends AbstractController
       return $this->jsonResponseHelper->internal($error->getMessage());
     }
   }
+
+
+  /**
+   * @Route("/home/update", name="home.update")
+   */
+  public function update(Request $request)
+  {
+    try {
+      $tuduuId = $request->request->get('tuduuId');
+      // $userEmail = $this->session->get('userEmail');
+      // $user = $this->userService->findOneByEmail($userEmail); 
+      if (trim($tuduuId) === '') {
+        return $this->jsonResponseHelper->badRequest('Id is required');
+      }
+      $tuduu = $this->tuduuService->getById($tuduuId);
+      $tuduu->setCompleted(!$tuduu->getCompleted());
+      if ($tuduu === null) {
+        return $this->jsonResponseHelper->notFound('Tuduu not found');
+      }
+      $this->tuduuService->update($tuduu);
+
+      // $user = $this->userService->findOneByEmail($userEmail);
+      // $tuduus = $user->getTuduus();
+      // $result = $this->renderView('shared/_tuduus.html.twig', [
+      //   'tuduus' => $tuduus,
+      // ]);
+
+      return $this->jsonResponseHelper->created('Tuduu updated');
+    } catch (ExceptionHelper $error) {
+      return $this->jsonResponseHelper->badRequest($error->getMessage());
+    } catch (Throwable $error) {
+      return $this->jsonResponseHelper->internal($error->getMessage());
+    }
+  }
 }

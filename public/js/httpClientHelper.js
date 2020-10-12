@@ -10,3 +10,16 @@ async function asyncHttpPost(data, url) {
   });
   return await result.json();
 }
+
+/**
+ * Send http put request
+ * @param {FormData} data
+ * @param {string} url
+ */
+async function asyncHttpPut(data, url) {
+  const result = await fetch(url, {
+    method: 'PUT',
+    body: data,
+  });
+  return await result.json();
+}

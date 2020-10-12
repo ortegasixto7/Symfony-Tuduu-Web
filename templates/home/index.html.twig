@@ -1,95 +1,95 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container">
-  <h1 class="center-align">Tuduu</h1>
-  <div class="row">
-    <div class="col s12 m8 offset-m2 l8 offset-l2">
-      <div class="card-panel hoverable">
-      <div class="row">
-        <div class="input-field col s9">
-        <input id="_token" name="_token" type="hidden" value="{{ csrf_token('addTuduu') }}" />
-        <input id="input-add-tuduu" name="input-add-tuduu" type="text" />
-        <label for="input-add-tuduu">What do you need to do today?</label>
-        </div>
-        <div class="input-field col s3">
-        <button
-          class="btn waves-effect waves-light"
-          type="button"
-          style="width: 100%; margin-top: 10px;"
-          onclick="addTuduu()"
-        >
-          Add
-        </button>
-        </div>
-      </div>
-
-      {# Progress component #}
-      <div id="progress-component" class="hide">
-        {{ include('shared/_progress.html.twig') }}
-      </div>
-
-      <section id="collection-tuduus">
-        {# Tuduus component #}
-        {{ include('shared/_tuduus.html.twig', { tuduus: tuduus }) }}
-      </section>
-
-      <ul class="collection">
-          <li class="collection-item">
-          <form action="#">
-            <div>
-              <label>
-                <input type="checkbox" checked="checked" />
-                <span style="text-decoration: line-through;">Red</span>
-              </label>
-              <a href="#!" class="secondary-content"><i class="material-icons">clear</i></a>
+  <div class="container">
+    <h1 class="center-align">Tuduu</h1>
+    <div class="row">
+      <div class="col s12 m8 offset-m2 l8 offset-l2">
+        <div class="card-panel hoverable">
+          <div class="row">
+            <div class="input-field col s9">
+              <input id="_token" name="_token" type="hidden" value="{{ csrf_token('addTuduu') }}"/>
+              <input id="input-add-tuduu" name="input-add-tuduu" type="text"/>
+              <label for="input-add-tuduu">What do you need to do today?</label>
             </div>
-          </form>
-          </li>
-      </ul>
+            <div class="input-field col s3">
+              <button class="btn waves-effect waves-light" type="button" style="width: 100%; margin-top: 10px;" onclick="addTuduu()">
+                Add
+              </button>
+            </div>
+          </div>
+
+          {# Progress component #}
+          <div id="progress-component" class="hide">
+            {{ include('shared/_progress.html.twig') }}
+          </div>
+
+          <section
+            id="collection-tuduus">
+            {# Tuduus component #}
+            {{ include('shared/_tuduus.html.twig', { tuduus: tuduus }) }}
+          </section>
+
+          <ul class="collection">
+            <li class="collection-item">
+              <form action="#">
+                <div>
+                  <label>
+                    <input type="checkbox" checked="checked"/>
+                    <span style="text-decoration: line-through;">Red</span>
+                  </label>
+                  <a href="#!" class="secondary-content">
+                    <i class="material-icons">clear</i>
+                  </a>
+                </div>
+              </form>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
-</div>
 {% endblock %}
 {% block javascripts %}
-<script src="{{ asset('js/httpClientHelper.js') }}"></script>
-<script>
-  const inputName$ = document.getElementById('input-add-tuduu')
-  const sectionCollectionTuduus$ = document.getElementById('collection-tuduus')
-  const token = document.getElementById('_token').value
-  async function addTuduu(){ 
+  <script src="{{ asset('js/httpClientHelper.js') }}"></script>
+  <script>
+    const inputName$ = document.getElementById('input-add-tuduu')
+    const sectionCollectionTuduus$ = document.getElementById('collection-tuduus')
+    const token = document.getElementById('_token').value
+    async function addTuduu() {
 
-    if(inputName$.value.toString().trim() === ''){
-      showToast('Please type something!')
-      inputName$.value = ''
-      return
+      if (inputName$.value.toString().trim() === '') {
+        showToast('Please type something!')
+        inputName$.value = ''
+        return
+      }
+
+      const data = new FormData()
+      data.append('tuduuName', inputName$.value)
+      data.append('token', token)
+
+      try {
+        toggleProgress()
+        const result = await asyncHttpPost(data, '/home/create')
+        showToast(result.message)
+        sectionCollectionTuduus$.innerHTML = result.data.resultView
+        inputName$.value = ''
+      } catch (error) {
+        console.error(error)
+      } finally {
+        toggleProgress()
+      }
     }
 
-    const data = new FormData()
-    data.append('tuduuName', inputName$.value)
-    data.append('token', token)
-
-    try {
-      toggleProgress()
-      const result = await asyncHttpPost(data, '/home/create')
-      showToast(result.message)
-      sectionCollectionTuduus$.innerHTML = result.data.resultView
-      inputName$.value = ''
-    } catch(error) {
-      console.error(error)
-    } finally {
-      toggleProgress()
+    function toggleProgress() {
+      const element = document.getElementById("progress-component");
+      element.classList.toggle("hide");
     }
-  }
 
-  function toggleProgress(){
-    const element = document.getElementById("progress-component");
-    element.classList.toggle("hide");
-  }
-
-  function showToast(message) {
-    M.toast({ html: message })
-  }
-</script>
+    function showToast(message) {
+      M.toast({
+        html: message
+      })
+    }
+  </script>
 {% endblock %}
