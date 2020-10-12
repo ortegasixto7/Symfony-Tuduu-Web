@@ -22,4 +22,15 @@ class TuduuRepositoryDoctrineAdapter implements ITuduuPersistence
     $this->entityManager->persist($tuduu);
     $this->entityManager->flush();
   }
+
+  public function update(Tuduu $tuduu): void
+  {
+    $this->entityManager->persist($tuduu);
+    $this->entityManager->flush();
+  }
+
+  public function getById(string $tuduuId): ?Tuduu
+  {
+    return $this->tuduuRepository->findOneBy(['id' => $tuduuId]);
+  }
 }
