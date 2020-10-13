@@ -1,6 +1,6 @@
-<ul class="collection">
+<ul id="ul_tuduus" class="collection">
   {% for tuduu in tuduus %}
-    <li class="collection-item">
+    <li id="li_{{ tuduu.id }}" class="collection-item">
       <div>
         <label>
           {% if tuduu.completed %}
@@ -12,9 +12,9 @@
           {% endif %}
 
         </label>
-        <a href="#!" class="secondary-content">
+        <span class="secondary-content" style="cursor: pointer;" onclick="removeElementById('{{ tuduu.id }}')">
           <i class="material-icons">clear</i>
-        </a>
+        </span>
       </div>
     </li>
   {% endfor %}
@@ -43,6 +43,30 @@
       } else {
         element.classList.add("line-through");
       }
+    }
+
+    async function removeElementById(tuduuId) {
+      const data = new FormData();
+      data.append('tuduuId', tuduuId);
+
+      try {
+        document.getElementById (`li_${tuduuId}`).remove();;
+        if (isEmptyElementById('ul_tuduus')) {
+          document.getElementById('ul_tuduus').remove();
+        }
+        const result = await asyncHttpPost(data, '/home/delete');
+        showToast(result.message);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function isEmptyElementById(elementId) {
+      const element = document.getElementById(elementId);
+      if (element === null) {
+        return false;
+      }
+      return element.innerHTML.trim() === '';
     }
   </script>
 {% endblock %}

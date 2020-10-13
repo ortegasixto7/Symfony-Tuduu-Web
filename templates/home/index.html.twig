@@ -30,21 +30,6 @@
             {{ include('shared/_tuduus.html.twig', { tuduus: tuduus }) }}
           </section>
 
-          <ul class="collection">
-            <li class="collection-item">
-              <form action="#">
-                <div>
-                  <label>
-                    <input type="checkbox" checked="checked"/>
-                    <span style="text-decoration: line-through;">Red</span>
-                  </label>
-                  <a href="#!" class="secondary-content">
-                    <i class="material-icons">clear</i>
-                  </a>
-                </div>
-              </form>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
@@ -53,31 +38,31 @@
 {% block javascripts %}
   <script src="{{ asset('js/httpClientHelper.js') }}"></script>
   <script>
-    const inputName$ = document.getElementById('input-add-tuduu')
-    const sectionCollectionTuduus$ = document.getElementById('collection-tuduus')
-    const token = document.getElementById('_token').value
+    const inputName$ = document.getElementById('input-add-tuduu');
+    const sectionCollectionTuduus$ = document.getElementById('collection-tuduus');
+    const token = document.getElementById('_token').value;
     async function addTuduu() {
 
       if (inputName$.value.toString().trim() === '') {
-        showToast('Please type something!')
-        inputName$.value = ''
-        return
+        showToast('Please type something!');
+        inputName$.value = '';
+        return;
       }
 
-      const data = new FormData()
-      data.append('tuduuName', inputName$.value)
-      data.append('token', token)
+      const data = new FormData();
+      data.append('tuduuName', inputName$.value);
+      data.append('token', token);
 
       try {
-        toggleProgress()
-        const result = await asyncHttpPost(data, '/home/create')
-        showToast(result.message)
-        sectionCollectionTuduus$.innerHTML = result.data.resultView
-        inputName$.value = ''
+        toggleProgress();
+        const result = await asyncHttpPost(data, '/home/create');
+        showToast(result.message);
+        sectionCollectionTuduus$.innerHTML = result.data.resultView;
+        inputName$.value = '';
       } catch (error) {
-        console.error(error)
+        console.error(error);
       } finally {
-        toggleProgress()
+        toggleProgress();
       }
     }
 
@@ -89,7 +74,7 @@
     function showToast(message) {
       M.toast({
         html: message
-      })
+      });
     }
   </script>
 {% endblock %}
