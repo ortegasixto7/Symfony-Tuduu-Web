@@ -38,6 +38,14 @@ class TuduuService implements ITuduuUseCases
     $this->tuduuRepository->update($tuduu);
   }
 
+  public function delete(Tuduu $tuduu): void
+  {
+
+    if ($tuduu === null) throw new ExceptionHelper('Tuduu is Required');
+
+    $this->tuduuRepository->delete($tuduu);
+  }
+
   public function getById(string $tuduuId): ?Tuduu
   {
     return $this->tuduuRepository->getById($tuduuId);
