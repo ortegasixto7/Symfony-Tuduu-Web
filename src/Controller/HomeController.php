@@ -42,6 +42,8 @@ class HomeController extends AbstractController
     try {
       // Validate if user exists into the session
       $userEmail = $this->session->get('userEmail');
+      $this->validateSession($userEmail);
+
       $user = $this->userService->findOneByEmail($userEmail);
       if ($user === null) {
         throw new ExceptionHelper('User not exists!');
@@ -75,6 +77,7 @@ class HomeController extends AbstractController
       }
       $tuduuName = $request->request->get('tuduuName');
       $userEmail = $this->session->get('userEmail');
+      $this->validateSession($userEmail);
       $user = $this->userService->findOneByEmail($userEmail);
       if ($user === null) {
         throw new ExceptionHelper('User not exists!');
@@ -111,6 +114,8 @@ class HomeController extends AbstractController
       if (trim($tuduuId) === '') {
         return $this->jsonResponseHelper->badRequest('Id is required');
       }
+      $userEmail = $this->session->get('userEmail');
+      $this->validateSession($userEmail);
       $tuduu = $this->tuduuService->getById($tuduuId);
       $tuduu->setCompleted(!$tuduu->getCompleted());
       if ($tuduu === null) {
@@ -138,6 +143,8 @@ class HomeController extends AbstractController
       if (trim($tuduuId) === '') {
         return $this->jsonResponseHelper->badRequest('Id is required');
       }
+      $userEmail = $this->session->get('userEmail');
+      $this->validateSession($userEmail);
       $tuduu = $this->tuduuService->getById($tuduuId);
       if ($tuduu === null) {
         return $this->jsonResponseHelper->notFound('Tuduu not found');
@@ -151,6 +158,14 @@ class HomeController extends AbstractController
       return $this->jsonResponseHelper->badRequest($error->getMessage());
     } catch (Throwable $error) {
       return $this->jsonResponseHelper->internal($error->getMessage());
+    }
+  }
+
+  private function validateSession(?string $userEmailLoggedIn)
+  {
+    if ($userEmailLoggedIn === null) {
+      $this->addFlash(EnumMessage::ALERT, 'Session expired! please login again');
+      return $this->redirectToRoute('users.login');
     }
   }
 }
