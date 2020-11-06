@@ -42,7 +42,7 @@ final class JsonResponseHelper
     $json = [
       'message' => $message,
       'statusCode' => $statusCode,
-      'error' => ($statusCode === 400 || $statusCode === 404 || $statusCode === 500),
+      'error' => ($statusCode === 400 || $statusCode === 403 || $statusCode === 404 || $statusCode === 500),
       'data' => $data
     ];
     return new JsonResponse($json, $statusCode);

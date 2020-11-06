@@ -2,7 +2,10 @@
 
 {% block body %}
   <div class="container">
-    <h1 class="center-align">Tuduu</h1>
+    <h1 class="center-align">
+      <a href="{{path('auth.logout')}}"><img src="{{asset('icons/arrow-circle-left.svg')}}" class="icon" title="Log out"/></a>
+      Tuduu
+    </h1>
     <div class="row">
       <div class="col s12 m8 offset-m2 l8 offset-l2">
         <div class="card-panel hoverable">
@@ -57,8 +60,10 @@
         toggleProgress();
         const result = await asyncHttpPost(data, '/home/create');
         showToast(result.message);
-        sectionCollectionTuduus$.innerHTML = result.data.resultView;
-        inputName$.value = '';
+        if (result.data.resultView !== undefined) {
+          sectionCollectionTuduus$.innerHTML = result.data.resultView;
+          inputName$.value = '';
+        }
       } catch (error) {
         alert(error);
       } finally {
