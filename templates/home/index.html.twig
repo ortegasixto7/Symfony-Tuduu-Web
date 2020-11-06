@@ -3,7 +3,7 @@
 {% block body %}
   <div class="container">
     <h1 class="center-align">
-      <img src="{{asset('icons/arrow-circle-left.svg')}}" class="icon" title="Log out"/>
+      <a href="{{path('auth.logout')}}"><img src="{{asset('icons/arrow-circle-left.svg')}}" class="icon" title="Log out"/></a>
       Tuduu
     </h1>
     <div class="row">
