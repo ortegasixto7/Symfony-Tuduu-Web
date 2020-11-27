@@ -32,6 +32,10 @@
       try {
         toggleLineThrough(tuduuId);
         const result = await asyncHttpPost(data, '/home/update');
+        if (result.statusCode === 301) {
+          window.location.href = result.route;
+          return;
+        }
         showToast(result.message);
       } catch (error) {
         alert(error);
@@ -57,6 +61,10 @@
           document.getElementById('ul_tuduus').remove();
         }
         const result = await asyncHttpPost(data, '/home/delete');
+        if (result.statusCode === 301) {
+          window.location.href = result.route;
+          return;
+        }
         showToast(result.message);
       } catch (error) {
         alert(error);

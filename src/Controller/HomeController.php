@@ -42,7 +42,11 @@ class HomeController extends AbstractController
     try {
       // Validate if user exists into the session
       $userEmail = $this->session->get('userEmail');
-      $this->validateSession($userEmail);
+
+      // if ($userEmail === null) {
+      //   $this->addFlash(EnumMessage::ALERT, 'Session expired! please login again');
+      //   return $this->redirectToRoute('users.login');
+      // }
 
       $user = $this->userService->findOneByEmail($userEmail);
       if ($user === null) {
@@ -71,13 +75,18 @@ class HomeController extends AbstractController
   public function create(Request $request)
   {
     try {
-      $token = $request->request->get('token');
-      if (!$this->isCsrfTokenValid('addTuduu', $token)) {
-        return $this->jsonResponseHelper->unauthorized('Unauthorized');
-      }
+      // $token = $request->request->get('token');
+      // if (!$this->isCsrfTokenValid('addTuduu', $token)) {
+      //   return $this->jsonResponseHelper->unauthorized('Unauthorized');
+      // }
       $tuduuName = $request->request->get('tuduuName');
       $userEmail = $this->session->get('userEmail');
-      $this->validateSession($userEmail);
+
+      if ($userEmail === null) {
+        $this->session->set(EnumMessage::ALERT, 'Session expired! please login again');
+        return $this->jsonResponseHelper->redirectTo('/login');
+      }
+
       $user = $this->userService->findOneByEmail($userEmail);
       if ($user === null) {
         throw new ExceptionHelper('User not exists!');
@@ -115,7 +124,12 @@ class HomeController extends AbstractController
         return $this->jsonResponseHelper->badRequest('Id is required');
       }
       $userEmail = $this->session->get('userEmail');
-      $this->validateSession($userEmail);
+
+      if ($userEmail === null) {
+        $this->session->set(EnumMessage::ALERT, 'Session expired! please login again');
+        return $this->jsonResponseHelper->redirectTo('/login');
+      }
+
       $tuduu = $this->tuduuService->getById($tuduuId);
       $tuduu->setCompleted(!$tuduu->getCompleted());
       if ($tuduu === null) {
@@ -144,7 +158,12 @@ class HomeController extends AbstractController
         return $this->jsonResponseHelper->badRequest('Id is required');
       }
       $userEmail = $this->session->get('userEmail');
-      $this->validateSession($userEmail);
+
+      if ($userEmail === null) {
+        $this->session->set(EnumMessage::ALERT, 'Session expired! please login again');
+        return $this->jsonResponseHelper->redirectTo('/login');
+      }
+
       $tuduu = $this->tuduuService->getById($tuduuId);
       if ($tuduu === null) {
         return $this->jsonResponseHelper->notFound('Tuduu not found');
@@ -158,14 +177,6 @@ class HomeController extends AbstractController
       return $this->jsonResponseHelper->badRequest($error->getMessage());
     } catch (Throwable $error) {
       return $this->jsonResponseHelper->internal($error->getMessage());
-    }
-  }
-
-  private function validateSession(?string $userEmailLoggedIn)
-  {
-    if ($userEmailLoggedIn === null) {
-      $this->addFlash(EnumMessage::ALERT, 'Session expired! please login again');
-      return $this->redirectToRoute('users.login');
     }
   }
 }
