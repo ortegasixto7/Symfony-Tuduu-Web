@@ -43,10 +43,10 @@ class HomeController extends AbstractController
       // Validate if user exists into the session
       $userEmail = $this->session->get('userEmail');
 
-      // if ($userEmail === null) {
-      //   $this->addFlash(EnumMessage::ALERT, 'Session expired! please login again');
-      //   return $this->redirectToRoute('users.login');
-      // }
+      if ($userEmail === null) {
+        $this->addFlash(EnumMessage::ALERT, 'Session expired! please login again');
+        return $this->redirectToRoute('users.login');
+      }
 
       $user = $this->userService->findOneByEmail($userEmail);
       if ($user === null) {
