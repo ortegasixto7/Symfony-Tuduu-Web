@@ -36,6 +36,11 @@ class UsersController extends AbstractController
    */
   public function login(Request $request)
   {
+    $sessionErrorMessage = $this->session->get(EnumMessage::ALERT);
+    if ($sessionErrorMessage !== null) {
+      $this->addFlash(EnumMessage::ALERT, $sessionErrorMessage);
+    }
+
     $user = new UserLoginDTO();
     $form = $this->createForm(UserLoginType::class, $user);
 
