@@ -36,13 +36,18 @@ final class JsonResponseHelper
     return $this->base($message, 201, $data);
   }
 
+  public function redirectTo(string $routeName): JsonResponse
+  {
+    return new JsonResponse(['route' => $routeName, 'statusCode' => 301,], 301);
+  }
+
   private function base(string $message = '',  int $statusCode = 200, array $data = []): JsonResponse
   {
 
     $json = [
       'message' => $message,
       'statusCode' => $statusCode,
-      'error' => ($statusCode === 400 || $statusCode === 404 || $statusCode === 500),
+      'error' => ($statusCode === 400 || $statusCode === 403 || $statusCode === 404 || $statusCode === 500),
       'data' => $data
     ];
     return new JsonResponse($json, $statusCode);

@@ -1,24 +1,26 @@
-<ul id="ul_tuduus" class="collection">
-  {% for tuduu in tuduus %}
-    <li id="li_{{ tuduu.id }}" class="collection-item">
-      <div>
-        <label>
-          {% if tuduu.completed %}
-            <input id="input_{{ tuduu.id }}" type="checkbox" checked="checked" onchange="updateTuduu('{{ tuduu.id }}')"/>
-            <span id="span_{{ tuduu.id }}" class="line-through">{{ tuduu.name }}</span>
-          {% else %}
-            <input id="input_{{ tuduu.id }}" type="checkbox" onchange="updateTuduu('{{ tuduu.id }}')"/>
-            <span id="span_{{ tuduu.id }}">{{ tuduu.name }}</span>
-          {% endif %}
+{% if tuduus|length > 0 %}
+  <ul id="ul_tuduus" class="collection">
+    {% for tuduu in tuduus %}
+      <li id="li_{{ tuduu.id }}" class="collection-item">
+        <div>
+          <label>
+            {% if tuduu.completed %}
+              <input id="input_{{ tuduu.id }}" type="checkbox" checked="checked" onchange="updateTuduu('{{ tuduu.id }}')"/>
+              <span id="span_{{ tuduu.id }}" class="line-through">{{ tuduu.name }}</span>
+            {% else %}
+              <input id="input_{{ tuduu.id }}" type="checkbox" onchange="updateTuduu('{{ tuduu.id }}')"/>
+              <span id="span_{{ tuduu.id }}">{{ tuduu.name }}</span>
+            {% endif %}
 
-        </label>
-        <span class="secondary-content" style="cursor: pointer;" onclick="removeElementById('{{ tuduu.id }}')">
-          <i class="material-icons">clear</i>
-        </span>
-      </div>
-    </li>
-  {% endfor %}
-</ul>
+          </label>
+          <span class="secondary-content" style="cursor: pointer;" onclick="removeElementById('{{ tuduu.id }}')">
+            <i class="material-icons">clear</i>
+          </span>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
 {% block javascripts %}
   <script src="{{ asset('js/httpClientHelper.js') }}"></script>
   <script>
@@ -30,9 +32,13 @@
       try {
         toggleLineThrough(tuduuId);
         const result = await asyncHttpPost(data, '/home/update');
+        if (result.statusCode === 301) {
+          window.location.href = result.route;
+          return;
+        }
         showToast(result.message);
       } catch (error) {
-        console.error(error);
+        alert(error);
       }
     }
 
@@ -55,9 +61,13 @@
           document.getElementById('ul_tuduus').remove();
         }
         const result = await asyncHttpPost(data, '/home/delete');
+        if (result.statusCode === 301) {
+          window.location.href = result.route;
+          return;
+        }
         showToast(result.message);
       } catch (error) {
-        console.error(error);
+        alert(error);
       }
     }
 

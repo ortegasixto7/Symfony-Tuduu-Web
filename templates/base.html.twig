@@ -14,8 +14,19 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
     <style>
+      .icon {
+        height: 0.8em;
+        width: 0.8em;
+        cursor: pointer;
+        margin-bottom: -5px;
+      }
       .line-through {
         text-decoration: line-through;
+      }
+      @media screen and(max-width: 450px) {
+        .container {
+          width: 100%;
+        }
       }
     </style>
     {% block stylesheets %}{% endblock %}
