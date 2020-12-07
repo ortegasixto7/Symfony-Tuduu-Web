@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class UsersController extends AbstractController
@@ -36,6 +37,7 @@ class UsersController extends AbstractController
    */
   public function login(Request $request)
   {
+    throw new Exception('ErrorSixto');
     $sessionErrorMessage = $this->session->get(EnumMessage::ALERT);
     if ($sessionErrorMessage !== null) {
       $this->addFlash(EnumMessage::ALERT, $sessionErrorMessage);
