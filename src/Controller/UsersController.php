@@ -37,7 +37,6 @@ class UsersController extends AbstractController
    */
   public function login(Request $request)
   {
-    throw new Exception('ErrorSixto');
     $sessionErrorMessage = $this->session->get(EnumMessage::ALERT);
     if ($sessionErrorMessage !== null) {
       $this->addFlash(EnumMessage::ALERT, $sessionErrorMessage);
