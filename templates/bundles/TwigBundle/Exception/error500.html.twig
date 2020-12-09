@@ -1,10 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-  <h1>Internal Server Error SIXTO</h1>
+{% block main_stylesheets %}
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,900" rel="stylesheet" type="text/css"/>
+  <link href="{{ asset('css/error-pages.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
 
-  <p>
-    The requested page couldn't be located. Checkout for any URL misspelling or
-    <a href="{{ path('users.login') }}">return to the homepage</a>.
-  </p>
+{% block body %}
+  <div id="notfound">
+    <div class="notfound">
+      <div class="notfound-404">
+        <h1>500</h1>
+        <h2>Internal error</h2>
+      </div>
+      <a href="{{ path('users.login') }}">Go Back</a>
+    </div>
+  </div>
 {% endblock %}
