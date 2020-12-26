@@ -4,7 +4,7 @@ services:
   symfony-tuduu-web:
     build:
       context: ./
-      dockerfile: docker/symfony/Dockerfile
+      dockerfile: Dockerfile.symfony
     image: ortegasixto7/symfony-tuduu-web:latest
     container_name: symfony-tuduu-web
     restart: on-failure
@@ -18,7 +18,7 @@ services:
   symfony-tuduu-web-nginx:
     build:
       context: ./
-      dockerfile: docker/nginx/Dockerfile
+      dockerfile: Dockerfile.nginx
     image: ortegasixto7/symfony-tuduu-web-nginx:latest
     container_name: symfony-tuduu-web-nginx
     restart: on-failure

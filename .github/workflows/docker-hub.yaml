@@ -19,10 +19,10 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Docker build symfony
         run: |
-          docker build -f Dockerfile_symfony --build-arg APP_ENV=prod --build-arg APP_SECRET=$APP_SECRET --build-arg DATABASE_URL=$DATABASE_URL -t ortegasixto7/symfony-tuduu-web:latest
+          docker build -f Dockerfile.symfony --build-arg APP_ENV=prod --build-arg APP_SECRET=$APP_SECRET --build-arg DATABASE_URL=$DATABASE_URL -t ortegasixto7/symfony-tuduu-web:latest
       - name: Docker build nginx
         run: |
-          docker build -f Dockerfile_nginx -t ortegasixto7/symfony-tuduu-web-nginx:latest
+          docker build -f Dockerfile.nginx -t ortegasixto7/symfony-tuduu-web-nginx:latest
       - name: Docker push
         run: |
           docker push ortegasixto7/symfony-tuduu-web:latest
