@@ -1,6 +1,6 @@
 FROM composer as builder
 WORKDIR /app/
-COPY composer.* ./
+COPY ./composer.* ./
 RUN composer install
 
 
