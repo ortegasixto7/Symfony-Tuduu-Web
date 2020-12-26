@@ -1,7 +1,7 @@
 FROM composer as builder
 WORKDIR /app/
-COPY composer.json .
-COPY composer.lock .
+COPY ./composer.json .
+COPY ./composer.lock .
 RUN composer install
 
 
