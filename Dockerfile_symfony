@@ -1,7 +1,6 @@
 FROM composer as builder
 WORKDIR /app/
-RUN ../../
-COPY composer.* ./
+COPY src/composer.* ./
 RUN composer install
 
 
@@ -13,13 +12,11 @@ RUN docker-php-ext-install zip
 RUN docker-php-ext-install pdo pdo_mysql 
 
 WORKDIR /app
-COPY . .
+COPY src .
 COPY --from=builder /app/vendor /app/vendor
 
-RUN mkdir -p var/cache/prod
-RUN mkdir -p var/log
-RUN chmod -R 777 var/cache/prod
-RUN chmod -R 777 var/log
+RUN mkdir -p src/var/cache/prod && chmod -R 777 src/var/cache/prod
+RUN mkdir -p src/var/log && chmod -R 777 src/var/log
 
 ENV APP_ENV=${APP_ENV}
 ENV APP_SECRET=${APP_SECRET}
