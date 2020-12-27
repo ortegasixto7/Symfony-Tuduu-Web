@@ -15,8 +15,8 @@ WORKDIR /app
 COPY src .
 COPY --from=builder /app/vendor /app/vendor
 
-RUN mkdir -p src/var/cache/prod && chmod -R 777 src/var/cache/prod
-RUN mkdir -p src/var/log && chmod -R 777 src/var/log
+RUN mkdir -p var/cache/prod && chmod -R 777 var/cache/prod
+RUN mkdir -p var/log && chmod -R 777 var/log
 
 ENV APP_ENV=${APP_ENV}
 ENV APP_SECRET=${APP_SECRET}
