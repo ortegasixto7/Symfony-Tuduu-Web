@@ -18,6 +18,6 @@ COPY --from=builder /app/vendor /app/vendor
 RUN mkdir -p var/cache/prod && chmod -R 777 var/cache/prod
 RUN mkdir -p var/log && chmod -R 777 var/log
 
-ENV APP_ENV=${APP_ENV}
+ENV APP_ENV=prod
 ENV APP_SECRET=${APP_SECRET}
 ENV DATABASE_URL=${DATABASE_URL}
