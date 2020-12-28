@@ -1,0 +1,29 @@
+name: Docker Hub build and push
+
+on:
+  push:
+    branches: docker-hub
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Docker build symfony
+        run: |
+          docker build -f Dockerfile.symfony --build-arg APP_ENV=prod --build-arg APP_SECRET=$APP_SECRET --build-arg DATABASE_URL=$DATABASE_URL -t ortegasixto7/symfony-tuduu-web:latest .
+      - name: Docker build nginx
+        run: |
+          docker build -f Dockerfile.nginx -t ortegasixto7/symfony-tuduu-web-nginx:latest .
+      - name: Docker push
+        run: |
+          docker push ortegasixto7/symfony-tuduu-web:latest
+          docker push ortegasixto7/symfony-tuduu-web-nginx:latest
