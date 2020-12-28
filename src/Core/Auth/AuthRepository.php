@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Core\Auth;
 
-use App\Interfaces\IUserPersistence;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UserRepositoryDoctrineAdapter implements IUserPersistence
+class AuthRepository implements IAuthRepository
 {
 
-  private $userRepository;
+  private $authRepository;
   private $entityManager;
   public function __construct(EntityManagerInterface $entityManager)
   {
     $this->entityManager = $entityManager;
-    $this->userRepository = $entityManager->getRepository(User::class);;
+    $this->authRepository = $entityManager->getRepository(User::class);;
   }
 
   public function save(User $user): void
@@ -31,6 +30,6 @@ class UserRepositoryDoctrineAdapter implements IUserPersistence
 
   public function findOneByEmail(string $emailAddress): ?User
   {
-    return $this->userRepository->findOneBy(['email' => $emailAddress]);
+    return $this->authRepository->findOneBy(['email' => $emailAddress]);
   }
 }

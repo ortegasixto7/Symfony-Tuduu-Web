@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Interfaces;
+namespace App\Core\Tuduus;
 
 use App\Entity\Tuduu;
 
-interface ITuduuUseCases
+interface ITuduuService
 {
   public function save(Tuduu $tuduu): void;
   public function update(Tuduu $tuduu): void;

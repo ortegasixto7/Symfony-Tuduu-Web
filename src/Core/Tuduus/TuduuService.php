@@ -1,18 +1,16 @@
 <?php
 
-namespace App\Services;
+namespace App\Core\Tuduus;
 
-use App\Interfaces\ITuduuPersistence;
-use App\Interfaces\ITuduuUseCases;
 use App\Entity\Tuduu;
 use App\Helpers\ExceptionHelper;
 use DateTime;
 use Exception;
 
-class TuduuService implements ITuduuUseCases
+class TuduuService implements ITuduuService
 {
   private $tuduuRepository;
-  public function __construct(ITuduuPersistence $tuduuRepository)
+  public function __construct(ITuduuRepository $tuduuRepository)
   {
     $this->tuduuRepository = $tuduuRepository;
   }

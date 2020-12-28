@@ -1,3 +1,41 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+# Auth Controller
+index:
+  path: /
+  controller: App\Controller\AuthController::login
+
+auth.login:
+  path: /login
+  controller: App\Controller\AuthController::login
+
+auth.register:
+  path: /register
+  controller: App\Controller\AuthController::register
+
+auth.forgot_password:
+  path: /forgot-password
+  controller: App\Controller\AuthController::forgotPassword
+
+auth.change_password:
+  path: /change-password
+  controller: App\Controller\AuthController::changePassword
+
+auth.logout:
+  path: /logout
+  controller: App\Controller\AuthController::logout
+
+# Home Controller
+home.index:
+  path: /home
+  controller: App\Controller\HomeController::index
+
+home.create:
+  path: /home/create
+  controller: App\Controller\HomeController::create
+
+home.update:
+  path: /home/update
+  controller: App\Controller\HomeController::update
+
+home.delete:
+  path: /home/delete
+  controller: App\Controller\HomeController::delete

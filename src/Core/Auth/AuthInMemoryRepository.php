@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Core\Auth;
 
-use App\Interfaces\IUserPersistence;
 use App\Entity\User;
 use ArrayObject;
 
-class UserRepositoryMockAdapter implements IUserPersistence
+class AuthInMemoryRepository implements IAuthRepository
 {
   private array $users;
 

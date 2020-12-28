@@ -2,15 +2,12 @@
 
 namespace App\Controller;
 
+use App\Core\Auth\IAuthService;
+use App\Core\Tuduus\ITuduuService;
 use App\Entity\Tuduu;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Services\TuduuService;
-use App\Services\UserService;
-use App\Repositories\TuduuRepositoryDoctrineAdapter;
-use App\Repositories\UserRepositoryDoctrineAdapter;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Throwable;
 use App\Helpers\ExceptionHelper;
@@ -22,20 +19,21 @@ class HomeController extends AbstractController
 {
 
   private $session;
-  private $tuduuService;
-  private $userService;
+  private ITuduuService $tuduuService;
+  private IAuthService $authService;
   private $jsonResponseHelper;
-  public function __construct(EntityManagerInterface $entityManager, SessionInterface $session)
-  {
-    $this->tuduuService = new TuduuService(new TuduuRepositoryDoctrineAdapter($entityManager));
-    $this->userService = new UserService(new UserRepositoryDoctrineAdapter($entityManager));
+  public function __construct(
+    SessionInterface $session,
+    ITuduuService $tuduuService,
+    IAuthService $authService
+  ) {
+    $this->tuduuService = $tuduuService;
+    $this->authService = $authService;
     $this->jsonResponseHelper = new JsonResponseHelper();
     $this->session = $session;
   }
 
-  /**
-   * @Route("/home", name="home.index")
-   */
+
   public function index()
   {
     $tuduus = [];
@@ -45,10 +43,10 @@ class HomeController extends AbstractController
 
       if ($userEmail === null) {
         $this->addFlash(EnumMessage::ALERT, 'Session expired! please login again');
-        return $this->redirectToRoute('users.login');
+        return $this->redirectToRoute('auth.login');
       }
 
-      $user = $this->userService->findOneByEmail($userEmail);
+      $user = $this->authService->findOneByEmail($userEmail);
       if ($user === null) {
         throw new ExceptionHelper('User not exists!');
       }
@@ -69,9 +67,7 @@ class HomeController extends AbstractController
     }
   }
 
-  /**
-   * @Route("/home/create", name="home.create")
-   */
+
   public function create(Request $request)
   {
     try {
@@ -87,7 +83,7 @@ class HomeController extends AbstractController
         return $this->jsonResponseHelper->redirectTo('/login');
       }
 
-      $user = $this->userService->findOneByEmail($userEmail);
+      $user = $this->authService->findOneByEmail($userEmail);
       if ($user === null) {
         throw new ExceptionHelper('User not exists!');
       }
@@ -96,7 +92,7 @@ class HomeController extends AbstractController
       $tuduu->setUser($user);
       $this->tuduuService->save($tuduu);
 
-      $user = $this->userService->findOneByEmail($userEmail);
+      $user = $this->authService->findOneByEmail($userEmail);
       $tuduus = $user->getTuduus();
       $result = $this->renderView('shared/_tuduus.html.twig', [
         'tuduus' => $tuduus,
@@ -113,9 +109,6 @@ class HomeController extends AbstractController
   }
 
 
-  /**
-   * @Route("/home/update", name="home.update")
-   */
   public function update(Request $request)
   {
     try {
@@ -147,9 +140,7 @@ class HomeController extends AbstractController
     }
   }
 
-  /**
-   * @Route("/home/delete", name="home.delete")
-   */
+
   public function delete(Request $request)
   {
     try {
