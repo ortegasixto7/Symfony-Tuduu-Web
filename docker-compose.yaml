@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  symfony-tuduu-web:
+    build:
+      context: ./
+      dockerfile: Dockerfile.symfony
+    image: ortegasixto7/symfony-tuduu-web:latest
+    container_name: symfony-tuduu-web
+    restart: on-failure
+    environment:
+      APP_ENV: prod
+      APP_SECRET: APP_SECRET
+      DATABASE_URL: DATABASE_URL
+    networks:
+      - symfony-tuduu-web-network
+
+  symfony-tuduu-web-nginx:
+    build:
+      context: ./
+      dockerfile: Dockerfile.nginx
+    image: ortegasixto7/symfony-tuduu-web-nginx:latest
+    container_name: symfony-tuduu-web-nginx
+    restart: on-failure
+    ports:
+      - 5000:80
+    depends_on:
+      - symfony-tuduu-web
+    networks:
+      - symfony-tuduu-web-network
+
+networks:
+  symfony-tuduu-web-network:
+    driver: bridge
