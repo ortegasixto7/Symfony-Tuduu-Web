@@ -9,7 +9,6 @@ services:
     container_name: symfony-tuduu-web
     restart: on-failure
     environment:
-      APP_ENV: prod
       APP_SECRET: APP_SECRET
       DATABASE_URL: DATABASE_URL
     networks:
