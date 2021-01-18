@@ -3,7 +3,6 @@
 namespace App\Core\Auth;
 
 use App\Entity\User;
-use ArrayObject;
 
 class AuthInMemoryRepository implements IAuthRepository
 {
@@ -28,7 +27,7 @@ class AuthInMemoryRepository implements IAuthRepository
   {
     $result = null;
     foreach ($this->users as $user) {
-      if ($user->email === $emailAddress) {
+      if ($user->getEmail() === $emailAddress) {
         $result = $user;
         break;
       }
