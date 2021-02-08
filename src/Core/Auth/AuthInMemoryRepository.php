@@ -20,7 +20,11 @@ class AuthInMemoryRepository implements IAuthRepository
 
   public function update(User $user): void
   {
-    array_push($this->users, (object) $user);
+    $result = $this->findOneByEmail($user->getEmail());
+    if ($result) {
+      $this->users = [];
+      array_push($this->users, (object) $user);
+    }
   }
 
   public function findOneByEmail(string $emailAddress): ?User
