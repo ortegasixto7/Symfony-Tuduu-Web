@@ -1,20 +1,18 @@
 <?php
 // https://dzone.com/articles/applying-hexagonal-architecture-to-a-symfony-proje
-namespace App\Services;
+namespace App\Core\Auth;
 
-use App\Interfaces\IUserPersistence;
-use App\Interfaces\IUserUseCases;
 use App\Entity\User;
 use App\Helpers\PasswordHelper;
 use Exception;
 
-class UserService implements IUserUseCases
+class AuthService implements IAuthService
 {
-  private $userRepository;
+  private $authRepository;
   private $passwordHelper;
-  public function __construct(IUserPersistence $userRepository)
+  public function __construct(IAuthRepository $authRepository)
   {
-    $this->userRepository = $userRepository;
+    $this->authRepository = $authRepository;
     $this->passwordHelper = new PasswordHelper();
   }
 
@@ -29,7 +27,7 @@ class UserService implements IUserUseCases
 
     $user->setPassword($this->passwordHelper->encode($user->getPassword()));
     $user->setSecurityCode($this->passwordHelper->encode($user->getSecurityCode()));
-    $this->userRepository->save($user);
+    $this->authRepository->save($user);
   }
 
   public function update(User $user): void
@@ -43,12 +41,12 @@ class UserService implements IUserUseCases
 
     $user->setPassword($this->passwordHelper->encode($user->getPassword()));
     $user->setSecurityCode($this->passwordHelper->encode($user->getSecurityCode()));
-    $this->userRepository->update($user);
+    $this->authRepository->update($user);
   }
 
   public function findOneByEmail(string $emailAddress): ?User
   {
-    return $this->userRepository->findOneByEmail($emailAddress);
+    return $this->authRepository->findOneByEmail($emailAddress);
   }
 
   public function isSecurityCodeValid(string $securityCode, string $hash): bool

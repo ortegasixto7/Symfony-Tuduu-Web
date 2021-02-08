@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Interfaces;
+namespace App\Core\Auth;
 
 use App\Entity\User;
 
-interface IUserPersistence
+interface IAuthRepository
 {
   public function save(User $user): void;
   public function update(User $user): void;

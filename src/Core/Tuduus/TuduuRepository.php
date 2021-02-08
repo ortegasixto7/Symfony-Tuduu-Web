@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Core\Tuduus;
 
-use App\Interfaces\ITuduuPersistence;
 use App\Entity\Tuduu;
 use Doctrine\ORM\EntityManagerInterface;
 
-class TuduuRepositoryDoctrineAdapter implements ITuduuPersistence
+class TuduuRepository implements ITuduuRepository
 {
 
   private $tuduuRepository;

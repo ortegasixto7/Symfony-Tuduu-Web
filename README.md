@@ -25,6 +25,12 @@ Symfony webapp with MariaDB for Tuduu app
 - Bitbucket pipelines
 - Gitlab pipelines
 
+## Commands
+
+Run tests
+
+    php bin/phpunit
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
