@@ -240,4 +240,91 @@ class AuthServiceTest extends TestCase
     $this->assertTrue($authService->isPasswordValid('12345678', $result->getPassword()));
     $this->assertTrue($authService->isSecurityCodeValid('12345678', $result->getSecurityCode()));
   }
+
+  public function test_AuthService_Login_WithEmptyEmail_Returns_Exception()
+  {
+    $authService = new AuthService(new AuthInMemoryRepository());
+    $user = new User();
+    $user->setFirstName('FirstName');
+    $user->setLastName('LastName');
+    $user->setEmail('email@example.com');
+    $user->setPassword('123456');
+    $user->setSecurityCode('123456');
+    $authService->save($user);
+
+    try {
+      $authService->login('', '');
+    } catch (Exception $ex) {
+      $this->assertTrue($ex instanceof Exception);
+    }
+  }
+
+  public function test_AuthService_Login_WithEmptyPassword_Returns_Exception()
+  {
+    $authService = new AuthService(new AuthInMemoryRepository());
+    $user = new User();
+    $user->setFirstName('FirstName');
+    $user->setLastName('LastName');
+    $user->setEmail('email@example.com');
+    $user->setPassword('123456');
+    $user->setSecurityCode('123456');
+    $authService->save($user);
+
+    try {
+      $authService->login('email@example.com', '');
+    } catch (Exception $ex) {
+      $this->assertTrue($ex instanceof Exception);
+    }
+  }
+
+  public function test_AuthService_Login_WithIncorrectEmail_Returns_Exception()
+  {
+    $authService = new AuthService(new AuthInMemoryRepository());
+    $user = new User();
+    $user->setFirstName('FirstName');
+    $user->setLastName('LastName');
+    $user->setEmail('email@example.com');
+    $user->setPassword('123456');
+    $user->setSecurityCode('123456');
+    $authService->save($user);
+
+    try {
+      $authService->login('fake@example.com', '12');
+    } catch (Exception $ex) {
+      $this->assertTrue($ex instanceof Exception);
+    }
+  }
+
+  public function test_AuthService_Login_WithIncorrectPassword_Returns_Exception()
+  {
+    $authService = new AuthService(new AuthInMemoryRepository());
+    $user = new User();
+    $user->setFirstName('FirstName');
+    $user->setLastName('LastName');
+    $user->setEmail('email@example.com');
+    $user->setPassword('123456');
+    $user->setSecurityCode('123456');
+    $authService->save($user);
+
+    try {
+      $authService->login('email@example.com', '12');
+    } catch (Exception $ex) {
+      $this->assertTrue($ex instanceof Exception);
+    }
+  }
+
+  public function test_AuthService_Login_WithCorrectEmailAndPassword_Returns_True()
+  {
+    $authService = new AuthService(new AuthInMemoryRepository());
+    $user = new User();
+    $user->setFirstName('FirstName');
+    $user->setLastName('LastName');
+    $user->setEmail('email@example.com');
+    $user->setPassword('123456');
+    $user->setSecurityCode('123456');
+    $authService->save($user);
+
+    $result = $authService->login('email@example.com', '123456');
+    $this->assertTrue($result);
+  }
 }
