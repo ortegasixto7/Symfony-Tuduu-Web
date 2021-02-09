@@ -61,6 +61,8 @@ class AuthService implements IAuthService
 
   public function login(string $emailAddress, string $password): bool
   {
+    if (empty(trim($emailAddress))) throw new Exception('Email is Required');
+    if (empty(trim($password))) throw new Exception('Password is Required');
     $user = $this->findOneByEmail($emailAddress);
     if ($user === null) {
       throw new Exception("User or password are incorrect");
